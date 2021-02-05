@@ -291,7 +291,7 @@ jobs:
           fail-on-alert: true
           # Requires one-time-only creation of this branch on remote repo. This will
           # store the generated information.
-          gh-pages-branch: unmerged-pr-memory-data
+          gh-pages-branch: unmerged-pr-bench-data
 
           # Do not store historical benchmark info of unfinished PRs. Commits seem to get
           # made anyways, so make sure that the branch in `gh-pages-branch` is
@@ -435,7 +435,10 @@ jobs:
         # target repo where the Github Pages will be copied to.
         # https://github.com/marketplace/actions/github-pages-action#%EF%B8%8F-deploy-to-external-repository
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        external_repository: unicode-org/icu4x-docs
+
+        # external_repository: unicode-org/icu4x-docs
+        external_repository: echeran-org/icu4x-docs
+        
         publish_branch: gh-pages
         publish_dir: copy-to-ext-repo
         commit_message: Rust API docs + benchmark dashboards -> GH Pages
