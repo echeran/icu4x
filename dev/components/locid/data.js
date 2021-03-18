@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1612503893481,
+  "lastUpdate": 1616084646060,
   "repoUrl": "https://github.com/echeran/icu4x",
   "entries": {
     "Rust Benchmark": [
@@ -767,6 +767,42 @@ window.BENCHMARK_DATA = {
             "name": "locale/overview",
             "value": 3820,
             "range": "± 3",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "gregtatum@users.noreply.github.com",
+            "name": "Greg Tatum",
+            "username": "gregtatum"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "a4a8e4a68a1e9c3b3b0517068bd46707f410bf2e",
+          "message": "Pin the nightly version in CI (#526)",
+          "timestamp": "2021-03-12T15:19:41-06:00",
+          "tree_id": "d6e37aaaa114fcc11a47423215a3457177fa66bb",
+          "url": "https://github.com/echeran/icu4x/commit/a4a8e4a68a1e9c3b3b0517068bd46707f410bf2e"
+        },
+        "date": 1616084645451,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "langid/overview",
+            "value": 3594,
+            "range": "± 213",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "locale/overview",
+            "value": 5678,
+            "range": "± 301",
             "unit": "ns/iter"
           }
         ]
