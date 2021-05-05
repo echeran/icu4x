@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1619110570624,
+  "lastUpdate": 1620251196266,
   "repoUrl": "https://github.com/echeran/icu4x",
   "entries": {
     "Rust Benchmark": [
@@ -35,6 +35,42 @@ window.BENCHMARK_DATA = {
             "name": "locale/overview",
             "value": 5089,
             "range": "± 7",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "7cbe966099bd95ca509bb1d0c79ff2e5c114db5d",
+          "message": "Add PR template, including reminder for Conventional Comments",
+          "timestamp": "2021-05-05T14:38:03-07:00",
+          "tree_id": "051e6ee6537ae39474bac4199c3ce5a1e2627bbc",
+          "url": "https://github.com/echeran/icu4x/commit/7cbe966099bd95ca509bb1d0c79ff2e5c114db5d"
+        },
+        "date": 1620251195705,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "langid/overview",
+            "value": 3322,
+            "range": "± 179",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "locale/overview",
+            "value": 5127,
+            "range": "± 131",
             "unit": "ns/iter"
           }
         ]
