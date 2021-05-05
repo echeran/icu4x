@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1619110549317,
+  "lastUpdate": 1620251228189,
   "repoUrl": "https://github.com/echeran/icu4x",
   "entries": {
     "Rust Benchmark": [
@@ -41,6 +41,48 @@ window.BENCHMARK_DATA = {
             "name": "plurals/pluralrules/overview",
             "value": 104879,
             "range": "± 945",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "7cbe966099bd95ca509bb1d0c79ff2e5c114db5d",
+          "message": "Add PR template, including reminder for Conventional Comments",
+          "timestamp": "2021-05-05T14:38:03-07:00",
+          "tree_id": "051e6ee6537ae39474bac4199c3ce5a1e2627bbc",
+          "url": "https://github.com/echeran/icu4x/commit/7cbe966099bd95ca509bb1d0c79ff2e5c114db5d"
+        },
+        "date": 1620251227620,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "plurals/operands/overview",
+            "value": 1238,
+            "range": "± 30",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "plurals/parser/overview",
+            "value": 7391,
+            "range": "± 213",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "plurals/pluralrules/overview",
+            "value": 115273,
+            "range": "± 2684",
             "unit": "ns/iter"
           }
         ]
