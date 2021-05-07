@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1620251198835,
+  "lastUpdate": 1620420786973,
   "repoUrl": "https://github.com/echeran/icu4x",
   "entries": {
     "Rust Benchmark": [
@@ -71,6 +71,42 @@ window.BENCHMARK_DATA = {
             "name": "datetime/zoned_datetime_overview",
             "value": 2311929,
             "range": "± 73697",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zibi@braniecki.net",
+            "name": "Zibi Braniecki",
+            "username": "zbraniecki"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "938f943154dc8574a9d6e70c130cea2ee05ed527",
+          "message": "Auto and manually apply selected nursery clippies. (#661)",
+          "timestamp": "2021-04-20T13:43:52-07:00",
+          "tree_id": "32b06d6e7705aafb49f1e9e9a9a4b6840faf451f",
+          "url": "https://github.com/echeran/icu4x/commit/938f943154dc8574a9d6e70c130cea2ee05ed527"
+        },
+        "date": 1620420782748,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "datetime/datetime_overview",
+            "value": 1227500,
+            "range": "± 67045",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "datetime/zoned_datetime_overview",
+            "value": 2328820,
+            "range": "± 118554",
             "unit": "ns/iter"
           }
         ]
