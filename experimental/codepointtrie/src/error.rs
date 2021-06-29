@@ -8,4 +8,12 @@ use thiserror::Error;
 pub enum Error {
     #[error("Could not construct CodePointTrie from deserialized values: {reason}")]
     FromDeserialized { reason: &'static str },
+    #[error("Length of data array does not match corresponding header value")]
+    IncorrectDataLength,
+    #[error("Length of index array does not match corresponding header value")]
+    IncorrectIndexLength,
+    #[error("Data array must be large enough to contain error value")]
+    DataCannotContainError,
+    #[error("Data array must be large enough to contain value for range highStart..U+10FFFF")]
+    DataCannotContainHighRange,
 }

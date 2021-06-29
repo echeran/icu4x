@@ -108,28 +108,19 @@ impl<'trie, W: ValueWidth, T: TrieType> CodePointTrie<'trie, W, T> {
         data: ZeroVec<'trie, W>,
     ) -> Result<CodePointTrie<'trie, W, T>, Error> {
         if header.data_length < ERROR_VALUE_NEG_DATA_OFFSET {
-            return Err(Error::FromDeserialized {
-                reason: "Data array must be large enough to contain error value",
-            });
+            return Err(Error::DataCannotContainError);
         }
 
         if header.data_length < HIGH_VALUE_NEG_DATA_OFFSET {
-            return Err(Error::FromDeserialized {
-                reason:
-                    "Data array must be large enough to contain value for range highStart..U+10FFFF",
-            });
+            return Err(Error::DataCannotContainHighRange);
         }
 
         if index.len() as u32 != header.index_length {
-            return Err(Error::FromDeserialized {
-                reason: "Length of index array does not match corresponding header value",
-            });
+            return Err(Error::IncorrectIndexLength);
         }
 
         if data.len() as u32 != header.data_length {
-            return Err(Error::FromDeserialized {
-                reason: "Length of data array does not match corresponding header value",
-            });
+            return Err(Error::IncorrectDataLength);
         }
 
         // Note: this particular constructor is "templatized" through Rust's
@@ -244,5 +235,74 @@ pub fn get_code_point_trie_type_enum(trie_type_int: u8) -> Option<TrieTypeEnum> 
         0 => Some(TrieTypeEnum::Fast),
         1 => Some(TrieTypeEnum::Small),
         _ => None,
+    }
+}
+
+enum CPTAutoInner<'trie> {
+    Small8(CodePointTrie<'trie, u8, Small>),
+    Small16(CodePointTrie<'trie, u16, Small>),
+    Small32(CodePointTrie<'trie, u32, Small>),
+    Fast8(CodePointTrie<'trie, u8, Fast>),
+    Fast16(CodePointTrie<'trie, u16, Fast>),
+    Fast32(CodePointTrie<'trie, u32, Fast>),
+}
+
+pub struct CodePointTrieAuto<'trie>(CPTAutoInner<'trie>);
+
+impl<'trie> CodePointTrieAuto<'trie> {
+    pub fn get_u32(&self, code_point: u32) -> u32 {
+        match self.0 {
+            CPTAutoInner::Small8(ref s) => s.get_u32(code_point),
+            CPTAutoInner::Small16(ref s) => s.get_u32(code_point),
+            CPTAutoInner::Small32(ref s) => s.get_u32(code_point),
+            CPTAutoInner::Fast8(ref s) => s.get_u32(code_point),
+            CPTAutoInner::Fast16(ref s) => s.get_u32(code_point),
+            CPTAutoInner::Fast32(ref s) => s.get_u32(code_point),
+        }
+    }
+
+    pub fn new(
+        header: CodePointTrieHeader,
+        width: ValueWidthEnum,
+        ty: TrieTypeEnum,
+        index: ZeroVec<'trie, u16>,
+        data: &'trie [u8],
+    ) -> Result<CodePointTrieAuto<'trie>, Error> {
+        let inner = match width {
+            ValueWidthEnum::Bits8 => {
+                let vec = ZeroVec::try_from_bytes(&data).map_err(|_| Error::IncorrectDataLength)?;
+                match ty {
+                    TrieTypeEnum::Fast => {
+                        CPTAutoInner::Fast8(CodePointTrie::try_new(header, index, vec)?)
+                    }
+                    TrieTypeEnum::Small => {
+                        CPTAutoInner::Small8(CodePointTrie::try_new(header, index, vec)?)
+                    }
+                }
+            }
+            ValueWidthEnum::Bits16 => {
+                let vec = ZeroVec::try_from_bytes(&data).map_err(|_| Error::IncorrectDataLength)?;
+                match ty {
+                    TrieTypeEnum::Fast => {
+                        CPTAutoInner::Fast16(CodePointTrie::try_new(header, index, vec)?)
+                    }
+                    TrieTypeEnum::Small => {
+                        CPTAutoInner::Small16(CodePointTrie::try_new(header, index, vec)?)
+                    }
+                }
+            }
+            ValueWidthEnum::Bits32 => {
+                let vec = ZeroVec::try_from_bytes(&data).map_err(|_| Error::IncorrectDataLength)?;
+                match ty {
+                    TrieTypeEnum::Fast => {
+                        CPTAutoInner::Fast32(CodePointTrie::try_new(header, index, vec)?)
+                    }
+                    TrieTypeEnum::Small => {
+                        CPTAutoInner::Small32(CodePointTrie::try_new(header, index, vec)?)
+                    }
+                }
+            }
+        };
+        Ok(CodePointTrieAuto(inner))
     }
 }
