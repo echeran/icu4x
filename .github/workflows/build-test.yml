@@ -21,601 +21,601 @@ on:
 
 jobs:
 
-  # Build job - basic smoke test
-  check:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Load the default Rust toolchain via the rust-toolchain file.
-      run: rustup show
+  # # Build job - basic smoke test
+  # check:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Load the default Rust toolchain via the rust-toolchain file.
+  #     run: rustup show
 
-    - name: Get cargo-make version
-      id: cargo-make-version
-      run: |
-        echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
-      shell: bash
-    - name: Attempt to load cached cargo-make
-      uses: actions/cache@v2
-      id: cargo-make-cache
-      with:
-        path: |
-          ~/.cargo/bin/cargo-make
-          ~/.cargo/bin/cargo-make.exe
-        key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
-    - name: Install cargo-make
-      if: steps.cargo-make-cache.outputs.cache-hit != 'true'
-      uses: actions-rs/install@v0.1.2
-      with:
-        crate: cargo-make
-        version: latest
+  #   - name: Get cargo-make version
+  #     id: cargo-make-version
+  #     run: |
+  #       echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
+  #     shell: bash
+  #   - name: Attempt to load cached cargo-make
+  #     uses: actions/cache@v2
+  #     id: cargo-make-cache
+  #     with:
+  #       path: |
+  #         ~/.cargo/bin/cargo-make
+  #         ~/.cargo/bin/cargo-make.exe
+  #       key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
+  #   - name: Install cargo-make
+  #     if: steps.cargo-make-cache.outputs.cache-hit != 'true'
+  #     uses: actions-rs/install@v0.1.2
+  #     with:
+  #       crate: cargo-make
+  #       version: latest
 
-    - name: Check
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: make
-        args: ci-job-check
+  #   - name: Check
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: make
+  #       args: ci-job-check
 
-  # Test job - runs all "cargo make" testing commands except docs
-  test:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-    runs-on: ${{ matrix.os }}
+  # # Test job - runs all "cargo make" testing commands except docs
+  # test:
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os: [ ubuntu-latest, macos-latest, windows-latest ]
+  #   runs-on: ${{ matrix.os }}
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Load the default Rust toolchain via the rust-toolchain file.
-      run: rustup show
-    - name: Get cargo-make version
-      id: cargo-make-version
-      run: |
-        echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
-      shell: bash
-    - name: Attempt to load cached cargo-make
-      uses: actions/cache@v2
-      id: cargo-make-cache
-      with:
-        path: |
-          ~/.cargo/bin/cargo-make
-          ~/.cargo/bin/cargo-make.exe
-        key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
-    - name: Install cargo-make
-      if: steps.cargo-make-cache.outputs.cache-hit != 'true'
-      uses: actions-rs/install@v0.1.2
-      with:
-        crate: cargo-make
-        version: latest
-    - name: Build
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: build
-        args: --all-targets --all-features
-    - name: Run `cargo make ci-job-test`
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: make
-        args: ci-job-test
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Load the default Rust toolchain via the rust-toolchain file.
+  #     run: rustup show
+  #   - name: Get cargo-make version
+  #     id: cargo-make-version
+  #     run: |
+  #       echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
+  #     shell: bash
+  #   - name: Attempt to load cached cargo-make
+  #     uses: actions/cache@v2
+  #     id: cargo-make-cache
+  #     with:
+  #       path: |
+  #         ~/.cargo/bin/cargo-make
+  #         ~/.cargo/bin/cargo-make.exe
+  #       key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
+  #   - name: Install cargo-make
+  #     if: steps.cargo-make-cache.outputs.cache-hit != 'true'
+  #     uses: actions-rs/install@v0.1.2
+  #     with:
+  #       crate: cargo-make
+  #       version: latest
+  #   - name: Build
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: build
+  #       args: --all-targets --all-features
+  #   - name: Run `cargo make ci-job-test`
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: make
+  #       args: ci-job-test
 
-  testdata:
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-    runs-on: ${{ matrix.os }}
+  # testdata:
+  #   strategy:
+  #     matrix:
+  #       os: [ ubuntu-latest, macos-latest, windows-latest ]
+  #   runs-on: ${{ matrix.os }}
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Load the default Rust toolchain via the rust-toolchain file.
-      run: rustup show
-    - name: Get cargo-make version
-      id: cargo-make-version
-      run: |
-        echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
-      shell: bash
-    - name: Attempt to load cached cargo-make
-      uses: actions/cache@v2
-      id: cargo-make-cache
-      with:
-        path: |
-          ~/.cargo/bin/cargo-make
-          ~/.cargo/bin/cargo-make.exe
-        key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
-    - name: Install cargo-make
-      if: steps.cargo-make-cache.outputs.cache-hit != 'true'
-      uses: actions-rs/install@v0.1.2
-      with:
-        crate: cargo-make
-        version: latest
-    # Note: rustfmt is required for databake formatting
-    - name: Install rustfmt
-      run: rustup component add rustfmt
-    - name: Build icu4x-testdata-datagen
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: build
-        args: --bin=icu4x-testdata-datagen --features=bin
-    - name: Build icu4x-datagen
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: build
-        args: --bin=icu4x-datagen --features=experimental,bin
-    - name: Run `cargo make ci-job-testdata`
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: make
-        args: ci-job-testdata
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Load the default Rust toolchain via the rust-toolchain file.
+  #     run: rustup show
+  #   - name: Get cargo-make version
+  #     id: cargo-make-version
+  #     run: |
+  #       echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
+  #     shell: bash
+  #   - name: Attempt to load cached cargo-make
+  #     uses: actions/cache@v2
+  #     id: cargo-make-cache
+  #     with:
+  #       path: |
+  #         ~/.cargo/bin/cargo-make
+  #         ~/.cargo/bin/cargo-make.exe
+  #       key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
+  #   - name: Install cargo-make
+  #     if: steps.cargo-make-cache.outputs.cache-hit != 'true'
+  #     uses: actions-rs/install@v0.1.2
+  #     with:
+  #       crate: cargo-make
+  #       version: latest
+  #   # Note: rustfmt is required for databake formatting
+  #   - name: Install rustfmt
+  #     run: rustup component add rustfmt
+  #   - name: Build icu4x-testdata-datagen
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: build
+  #       args: --bin=icu4x-testdata-datagen --features=bin
+  #   - name: Build icu4x-datagen
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: build
+  #       args: --bin=icu4x-datagen --features=experimental,bin
+  #   - name: Run `cargo make ci-job-testdata`
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: make
+  #       args: ci-job-testdata
 
-  # Docs test job - runs all "cargo make" testing commands for docs
-  test-docs:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Load the default Rust toolchain via the rust-toolchain file.
-      run: rustup show
-    - name: Get cargo-make version
-      id: cargo-make-version
-      run: |
-        echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
-      shell: bash
-    - name: Attempt to load cached cargo-make
-      uses: actions/cache@v2
-      id: cargo-make-cache
-      with:
-        path: |
-          ~/.cargo/bin/cargo-make
-          ~/.cargo/bin/cargo-make.exe
-        key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
-    - name: Install cargo-make
-      if: steps.cargo-make-cache.outputs.cache-hit != 'true'
-      uses: actions-rs/install@v0.1.2
-      with:
-        crate: cargo-make
-        version: latest
-    - name: Build
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: build
-        args: --all-targets --all-features
-    - name: Run `cargo make ci-job-test-docs`
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: make
-        args: ci-job-test-docs
+  # # Docs test job - runs all "cargo make" testing commands for docs
+  # test-docs:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Load the default Rust toolchain via the rust-toolchain file.
+  #     run: rustup show
+  #   - name: Get cargo-make version
+  #     id: cargo-make-version
+  #     run: |
+  #       echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
+  #     shell: bash
+  #   - name: Attempt to load cached cargo-make
+  #     uses: actions/cache@v2
+  #     id: cargo-make-cache
+  #     with:
+  #       path: |
+  #         ~/.cargo/bin/cargo-make
+  #         ~/.cargo/bin/cargo-make.exe
+  #       key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
+  #   - name: Install cargo-make
+  #     if: steps.cargo-make-cache.outputs.cache-hit != 'true'
+  #     uses: actions-rs/install@v0.1.2
+  #     with:
+  #       crate: cargo-make
+  #       version: latest
+  #   - name: Build
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: build
+  #       args: --all-targets --all-features
+  #   - name: Run `cargo make ci-job-test-docs`
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: make
+  #       args: ci-job-test-docs
 
-  # Runs full datagen on prod data
-  full-datagen:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Load the default Rust toolchain via the rust-toolchain file.
-      run: rustup show
-    - name: Attempt to load cached source data
-      uses: actions/cache@v2
-      id: source-data-cache
-      with:
-        path: data/source
-        key: source-data/41/icu4x-2022-07-25-71.x
-    - name: Download CLDR source data
-      if: steps.source-data-cache.outputs.cache-hit != 'true'
-      uses: robinraju/release-downloader@v1.3
-      with: 
-        repository: "unicode-org/cldr-json"
-        tag: "41.0.0"
-        fileName: "cldr-41.0.0-json-full.zip"
-        out-file-path: "data/source/"
-    - name: Download ICU source data
-      if: steps.source-data-cache.outputs.cache-hit != 'true'
-      uses: robinraju/release-downloader@v1.3
-      with: 
-        repository: "unicode-org/icu"
-        tag: "icu4x/2022-07-25/71.x"
-        fileName: "icuexportdata_icu4x-2022-07-25-71.x.zip"
-        out-file-path: "data/source/"
-    - name: Run datagen
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: run
-        args: > 
-          -p icu_datagen --features bin --release --
-          --icuexport-root data/source/icuexportdata_icu4x-2022-07-25-71.x.zip
-          --cldr-root data/source/cldr-41.0.0-json-full.zip
-          --all-locales
-          --all-keys
-          --format blob
-          --syntax postcard
-          --out data/full.postcard
+  # # Runs full datagen on prod data
+  # full-datagen:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Load the default Rust toolchain via the rust-toolchain file.
+  #     run: rustup show
+  #   - name: Attempt to load cached source data
+  #     uses: actions/cache@v2
+  #     id: source-data-cache
+  #     with:
+  #       path: data/source
+  #       key: source-data/41/icu4x-2022-07-25-71.x
+  #   - name: Download CLDR source data
+  #     if: steps.source-data-cache.outputs.cache-hit != 'true'
+  #     uses: robinraju/release-downloader@v1.3
+  #     with: 
+  #       repository: "unicode-org/cldr-json"
+  #       tag: "41.0.0"
+  #       fileName: "cldr-41.0.0-json-full.zip"
+  #       out-file-path: "data/source/"
+  #   - name: Download ICU source data
+  #     if: steps.source-data-cache.outputs.cache-hit != 'true'
+  #     uses: robinraju/release-downloader@v1.3
+  #     with: 
+  #       repository: "unicode-org/icu"
+  #       tag: "icu4x/2022-07-25/71.x"
+  #       fileName: "icuexportdata_icu4x-2022-07-25-71.x.zip"
+  #       out-file-path: "data/source/"
+  #   - name: Run datagen
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: run
+  #       args: > 
+  #         -p icu_datagen --features bin --release --
+  #         --icuexport-root data/source/icuexportdata_icu4x-2022-07-25-71.x.zip
+  #         --cldr-root data/source/cldr-41.0.0-json-full.zip
+  #         --all-locales
+  #         --all-keys
+  #         --format blob
+  #         --syntax postcard
+  #         --out data/full.postcard
 
-  # FFI job - runs all "cargo make" FFI tests
-  ffi:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ ubuntu-latest ]
-    runs-on: ${{ matrix.os }}
+  # # FFI job - runs all "cargo make" FFI tests
+  # ffi:
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os: [ ubuntu-latest ]
+  #   runs-on: ${{ matrix.os }}
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Load the default Rust toolchain via the rust-toolchain file.
-      run: rustup show
-    - name: Load cortex target for no_std build.
-      run: |
-        rustup install nightly-2022-04-05
-        rustup component add --toolchain nightly-2022-04-05 rust-src
-        rustup target add thumbv7m-none-eabi --toolchain nightly-2022-04-05
-        rustup target add thumbv8m.main-none-eabihf --toolchain nightly-2022-04-05
-        rustup target add x86_64-unknown-linux-gnu --toolchain nightly-2022-04-05
-    - name: Set up Clang-14
-      run: |
-        wget https://apt.llvm.org/llvm.sh
-        chmod +x llvm.sh
-        sudo ./llvm.sh 14
-    - name: Get cargo-make version
-      id: cargo-make-version
-      run: |
-        echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
-      shell: bash
-    - name: Attempt to load cached cargo-make
-      uses: actions/cache@v2
-      id: cargo-make-cache
-      with:
-        path: |
-          ~/.cargo/bin/cargo-make
-          ~/.cargo/bin/cargo-make.exe
-        key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
-    - name: Install cargo-make
-      if: steps.cargo-make-cache.outputs.cache-hit != 'true'
-      uses: actions-rs/install@v0.1.2
-      with:
-        crate: cargo-make
-        version: latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Load the default Rust toolchain via the rust-toolchain file.
+  #     run: rustup show
+  #   - name: Load cortex target for no_std build.
+  #     run: |
+  #       rustup install nightly-2022-04-05
+  #       rustup component add --toolchain nightly-2022-04-05 rust-src
+  #       rustup target add thumbv7m-none-eabi --toolchain nightly-2022-04-05
+  #       rustup target add thumbv8m.main-none-eabihf --toolchain nightly-2022-04-05
+  #       rustup target add x86_64-unknown-linux-gnu --toolchain nightly-2022-04-05
+  #   - name: Set up Clang-14
+  #     run: |
+  #       wget https://apt.llvm.org/llvm.sh
+  #       chmod +x llvm.sh
+  #       sudo ./llvm.sh 14
+  #   - name: Get cargo-make version
+  #     id: cargo-make-version
+  #     run: |
+  #       echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
+  #     shell: bash
+  #   - name: Attempt to load cached cargo-make
+  #     uses: actions/cache@v2
+  #     id: cargo-make-cache
+  #     with:
+  #       path: |
+  #         ~/.cargo/bin/cargo-make
+  #         ~/.cargo/bin/cargo-make.exe
+  #       key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
+  #   - name: Install cargo-make
+  #     if: steps.cargo-make-cache.outputs.cache-hit != 'true'
+  #     uses: actions-rs/install@v0.1.2
+  #     with:
+  #       crate: cargo-make
+  #       version: latest
 
-    - name: Install Python
-      uses: actions/setup-python@v1
-    - name: Install Sphinx
-      uses: BSFishy/pip-action@v1
-      with:
-        packages: |
-          sphinx
-          sphinx-rtd-theme
-    - name: Run diplomat-get-rev to ensure it works
-      id: diplomat-getrev-check
-      run: cargo make --loglevel error diplomat-get-rev
-    - name: Get Diplomat version
-      id: diplomat-version
-      run: |
-        echo "::set-output name=rev::$(cargo make --loglevel error diplomat-get-rev |  tr -d '[:space:]')"
-      shell: bash
-    - name: Attempt to load cached Diplomat
-      uses: actions/cache@v2
-      id: diplomat-cache
-      with:
-        path: |
-          ~/.cargo/bin/diplomat-tool
-          ~/.cargo/bin/diplomat-tool.exe
-        key: ${{ runner.os }}-diplomat-${{ steps.diplomat-version.outputs.rev }}
+  #   - name: Install Python
+  #     uses: actions/setup-python@v1
+  #   - name: Install Sphinx
+  #     uses: BSFishy/pip-action@v1
+  #     with:
+  #       packages: |
+  #         sphinx
+  #         sphinx-rtd-theme
+  #   - name: Run diplomat-get-rev to ensure it works
+  #     id: diplomat-getrev-check
+  #     run: cargo make --loglevel error diplomat-get-rev
+  #   - name: Get Diplomat version
+  #     id: diplomat-version
+  #     run: |
+  #       echo "::set-output name=rev::$(cargo make --loglevel error diplomat-get-rev |  tr -d '[:space:]')"
+  #     shell: bash
+  #   - name: Attempt to load cached Diplomat
+  #     uses: actions/cache@v2
+  #     id: diplomat-cache
+  #     with:
+  #       path: |
+  #         ~/.cargo/bin/diplomat-tool
+  #         ~/.cargo/bin/diplomat-tool.exe
+  #       key: ${{ runner.os }}-diplomat-${{ steps.diplomat-version.outputs.rev }}
 
-    - name: Install Diplomat (git hash)
-      if: steps.diplomat-cache.outputs.cache-hit != 'true' && !contains(steps.diplomat-version.outputs.rev, '.')
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: install
-        args: --git https://github.com/rust-diplomat/diplomat.git --rev ${{ steps.diplomat-version.outputs.rev }} diplomat-tool
+  #   - name: Install Diplomat (git hash)
+  #     if: steps.diplomat-cache.outputs.cache-hit != 'true' && !contains(steps.diplomat-version.outputs.rev, '.')
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: install
+  #       args: --git https://github.com/rust-diplomat/diplomat.git --rev ${{ steps.diplomat-version.outputs.rev }} diplomat-tool
 
-    - name: Install Diplomat (versioned)
-      if: steps.diplomat-cache.outputs.cache-hit != 'true' && contains(steps.diplomat-version.outputs.rev, '.')
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: install
-        args: --git https://github.com/rust-diplomat/diplomat.git --version ${{ steps.diplomat-version.outputs.rev }} diplomat-tool
+  #   - name: Install Diplomat (versioned)
+  #     if: steps.diplomat-cache.outputs.cache-hit != 'true' && contains(steps.diplomat-version.outputs.rev, '.')
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: install
+  #       args: --git https://github.com/rust-diplomat/diplomat.git --version ${{ steps.diplomat-version.outputs.rev }} diplomat-tool
 
-    - name: Build
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: build
-        args: --all-targets --all-features
-    - name: Run `cargo make ci-job-ffi`
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: make
-        args: ci-job-ffi
-      env:
-        CXX: "g++-10"
-
-
-  # Feature coverage job - builds all permutations of features
-  features:
-    runs-on: ubuntu-latest
-    needs: [check]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Load the default Rust toolchain via the rust-toolchain file.
-      run: rustup show
-    - name: Install cargo-all-features
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: install
-        args: cargo-all-features --version "^1.6"
-
-    - name: Get cargo-make version
-      id: cargo-make-version
-      run: |
-        echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
-      shell: bash
-    - name: Attempt to load cached cargo-make
-      uses: actions/cache@v2
-      id: cargo-make-cache
-      with:
-        path: |
-          ~/.cargo/bin/cargo-make
-          ~/.cargo/bin/cargo-make.exe
-        key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
-    - name: Install cargo-make
-      if: steps.cargo-make-cache.outputs.cache-hit != 'true'
-      uses: actions-rs/install@v0.1.2
-      with:
-        crate: cargo-make
-        version: latest
-
-    - name: Build All Feature Permutations
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: make
-        args: ci-job-features
-
-  # WASM Tests - runs Node.js tests for WASM bindings
-  wasm:
-    runs-on: ubuntu-latest
-    needs: [check]
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Load nightly Rust toolchain for WASM.
-        run: |
-          rustup install nightly-2022-04-05
-          rustup target add wasm32-unknown-unknown --toolchain nightly-2022-04-05
-          rustup target add wasm32-unknown-emscripten --toolchain nightly-2022-04-05
-          rustup component add rust-src --toolchain nightly-2022-04-05
-
-      - name: Install npm dependencies from cache
-        uses: actions/cache@v2
-        id: npm-cache
-        with:
-          path: ffi/diplomat/wasm/icu4x/node_modules
-          key: ${{ runner.os }}-npm-${{ hashFiles('ffi/diplomat/wasm/icu4x/package-lock.json') }}
-      - name: Install npm packages.
-        # If npm dependencies are not found in cache.
-        if: steps.npm-cache.outputs.cache-hit != 'true'
-        run: |
-          # This step requires wasm-opt and wabt. To install these two packages
-          # ready-to-use locally, you also can execute
-          # 'sudo npm install -g wasm-opt --unsafe-perm' and
-          # 'sudo npm install -g wabt'.
-          cd ffi/diplomat/wasm/icu4x
-          npm ci
-      - name: Set path to wasm-opt and wabt binaries
-        run: |
-          echo "$PWD/ffi/diplomat/wasm/icu4x/node_modules/wasm-opt/bin" >> $GITHUB_PATH
-          echo "$PWD/ffi/diplomat/wasm/icu4x/node_modules/wabt/bin" >> $GITHUB_PATH
-
-      - name: Get twiggy version
-        id: twiggy-version
-        run: |
-          # We install a specific version since we need https://github.com/rustwasm/twiggy/pull/576 and
-          # twiggy has not been updated yet. Switch this back to a regular cargo install when twiggy is updated.
-          echo "::set-output name=hash::92d59f439821cd6514a88e807dd6576bfece6244"
-        shell: bash
-      - name: Attempt to load cached twiggy
-        uses: actions/cache@v2
-        id: twiggy-cache
-        with:
-          path: |
-            ~/.cargo/bin/twiggy
-            ~/.cargo/bin/twiggy.exe
-          key: ${{ runner.os }}-twiggy-${{ steps.twiggy-version.outputs.hash }}
-      - name: Install twiggy
-        if: steps.twiggy-cache.outputs.cache-hit != 'true'
-        uses: actions-rs/cargo@v1.0.1
-        with:
-          command: install
-          args: --git https://github.com/rustwasm/twiggy.git --rev ${{ steps.twiggy-version.outputs.hash }} twiggy
+  #   - name: Build
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: build
+  #       args: --all-targets --all-features
+  #   - name: Run `cargo make ci-job-ffi`
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: make
+  #       args: ci-job-ffi
+  #     env:
+  #       CXX: "g++-10"
 
 
-      - name: Get cargo-make version
-        id: cargo-make-version
-        run: |
-          echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
-        shell: bash
-      - name: Attempt to load cached cargo-make
-        uses: actions/cache@v2
-        id: cargo-make-cache
-        with:
-          path: |
-            ~/.cargo/bin/cargo-make
-            ~/.cargo/bin/cargo-make.exe
-          key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
-      - name: Install cargo-make
-        if: steps.cargo-make-cache.outputs.cache-hit != 'true'
-        uses: actions-rs/install@v0.1.2
-        with:
-          crate: cargo-make
-          version: latest
-      - name: Install emsdk
-        run: |
-          cd ~
-          git clone https://github.com/emscripten-core/emsdk.git --branch 2.0.27
-          cd emsdk
-          ./emsdk install latest
-          ./emsdk activate latest
-      - name: Run diplomat-get-rev to ensure it works
-        id: diplomat-getrev-check
-        run: cargo make --loglevel error diplomat-get-rev
-      - name: Get Diplomat version
-        id: diplomat-version
-        run: |
-          echo "::set-output name=rev::$(cargo make --loglevel error diplomat-get-rev |  tr -d '[:space:]')"
-        shell: bash
-      - name: Attempt to load cached Diplomat
-        uses: actions/cache@v2
-        id: diplomat-cache
-        with:
-          path: |
-            ~/.cargo/bin/diplomat-tool
-            ~/.cargo/bin/diplomat-tool.exe
-          key: ${{ runner.os }}-diplomat-${{ steps.diplomat-version.outputs.rev }}
+  # # Feature coverage job - builds all permutations of features
+  # features:
+  #   runs-on: ubuntu-latest
+  #   needs: [check]
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Load the default Rust toolchain via the rust-toolchain file.
+  #     run: rustup show
+  #   - name: Install cargo-all-features
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: install
+  #       args: cargo-all-features --version "^1.6"
 
-      - name: Install Diplomat (git hash)
-        if: steps.diplomat-cache.outputs.cache-hit != 'true' && !contains(steps.diplomat-version.outputs.rev, '.')
-        uses: actions-rs/cargo@v1.0.1
-        with:
-          command: install
-          args: --git https://github.com/rust-diplomat/diplomat.git --rev ${{ steps.diplomat-version.outputs.rev }} diplomat-tool
+  #   - name: Get cargo-make version
+  #     id: cargo-make-version
+  #     run: |
+  #       echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
+  #     shell: bash
+  #   - name: Attempt to load cached cargo-make
+  #     uses: actions/cache@v2
+  #     id: cargo-make-cache
+  #     with:
+  #       path: |
+  #         ~/.cargo/bin/cargo-make
+  #         ~/.cargo/bin/cargo-make.exe
+  #       key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
+  #   - name: Install cargo-make
+  #     if: steps.cargo-make-cache.outputs.cache-hit != 'true'
+  #     uses: actions-rs/install@v0.1.2
+  #     with:
+  #       crate: cargo-make
+  #       version: latest
 
-      - name: Install Diplomat (versioned)
-        if: steps.diplomat-cache.outputs.cache-hit != 'true' && contains(steps.diplomat-version.outputs.rev, '.')
-        uses: actions-rs/cargo@v1.0.1
-        with:
-          command: install
-          args: --git https://github.com/rust-diplomat/diplomat.git --version ${{ steps.diplomat-version.outputs.rev }} diplomat-tool
+  #   - name: Build All Feature Permutations
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: make
+  #       args: ci-job-features
 
-      - name: Build
-        uses: actions-rs/cargo@v1.0.1
-        with:
-          command: make
-          args: wasm-release
-      - name: Install Node.js v14.17.0
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.17.0
-      - name: Build
-        uses: actions-rs/cargo@v1.0.1
-        with:
-          command: make
-          args: wasm-test-release
-      # This has to be a separate test since the emscripten sdk
-      # will otherwise interfere with other node-using tests
-      - name: Run emscripten test
-        run: |
-          . ~/emsdk/emsdk_env.sh
-          cargo make wasm-cpp-emscripten
+  # # WASM Tests - runs Node.js tests for WASM bindings
+  # wasm:
+  #   runs-on: ubuntu-latest
+  #   needs: [check]
 
-  # Fmt job - runs cargo fmt
-  fmt:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Load nightly Rust toolchain for WASM.
+  #       run: |
+  #         rustup install nightly-2022-04-05
+  #         rustup target add wasm32-unknown-unknown --toolchain nightly-2022-04-05
+  #         rustup target add wasm32-unknown-emscripten --toolchain nightly-2022-04-05
+  #         rustup component add rust-src --toolchain nightly-2022-04-05
 
-    - name: Load the default Rust toolchain via the rust-toolchain file.
-      run: rustup show
+  #     - name: Install npm dependencies from cache
+  #       uses: actions/cache@v2
+  #       id: npm-cache
+  #       with:
+  #         path: ffi/diplomat/wasm/icu4x/node_modules
+  #         key: ${{ runner.os }}-npm-${{ hashFiles('ffi/diplomat/wasm/icu4x/package-lock.json') }}
+  #     - name: Install npm packages.
+  #       # If npm dependencies are not found in cache.
+  #       if: steps.npm-cache.outputs.cache-hit != 'true'
+  #       run: |
+  #         # This step requires wasm-opt and wabt. To install these two packages
+  #         # ready-to-use locally, you also can execute
+  #         # 'sudo npm install -g wasm-opt --unsafe-perm' and
+  #         # 'sudo npm install -g wabt'.
+  #         cd ffi/diplomat/wasm/icu4x
+  #         npm ci
+  #     - name: Set path to wasm-opt and wabt binaries
+  #       run: |
+  #         echo "$PWD/ffi/diplomat/wasm/icu4x/node_modules/wasm-opt/bin" >> $GITHUB_PATH
+  #         echo "$PWD/ffi/diplomat/wasm/icu4x/node_modules/wabt/bin" >> $GITHUB_PATH
 
-    - name: Install rustfmt
-      run: rustup component add rustfmt
-
-
-    - name: Get cargo-make version
-      id: cargo-make-version
-      run: |
-        echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
-      shell: bash
-    - name: Attempt to load cached cargo-make
-      uses: actions/cache@v2
-      id: cargo-make-cache
-      with:
-        path: |
-          ~/.cargo/bin/cargo-make
-          ~/.cargo/bin/cargo-make.exe
-        key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
-    - name: Install cargo-make
-      if: steps.cargo-make-cache.outputs.cache-hit != 'true'
-      uses: actions-rs/install@v0.1.2
-      with:
-        crate: cargo-make
-        version: latest
+  #     - name: Get twiggy version
+  #       id: twiggy-version
+  #       run: |
+  #         # We install a specific version since we need https://github.com/rustwasm/twiggy/pull/576 and
+  #         # twiggy has not been updated yet. Switch this back to a regular cargo install when twiggy is updated.
+  #         echo "::set-output name=hash::92d59f439821cd6514a88e807dd6576bfece6244"
+  #       shell: bash
+  #     - name: Attempt to load cached twiggy
+  #       uses: actions/cache@v2
+  #       id: twiggy-cache
+  #       with:
+  #         path: |
+  #           ~/.cargo/bin/twiggy
+  #           ~/.cargo/bin/twiggy.exe
+  #         key: ${{ runner.os }}-twiggy-${{ steps.twiggy-version.outputs.hash }}
+  #     - name: Install twiggy
+  #       if: steps.twiggy-cache.outputs.cache-hit != 'true'
+  #       uses: actions-rs/cargo@v1.0.1
+  #       with:
+  #         command: install
+  #         args: --git https://github.com/rustwasm/twiggy.git --rev ${{ steps.twiggy-version.outputs.hash }} twiggy
 
 
-    - name: Check Format
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: make
-        args: ci-job-fmt
+  #     - name: Get cargo-make version
+  #       id: cargo-make-version
+  #       run: |
+  #         echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
+  #       shell: bash
+  #     - name: Attempt to load cached cargo-make
+  #       uses: actions/cache@v2
+  #       id: cargo-make-cache
+  #       with:
+  #         path: |
+  #           ~/.cargo/bin/cargo-make
+  #           ~/.cargo/bin/cargo-make.exe
+  #         key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
+  #     - name: Install cargo-make
+  #       if: steps.cargo-make-cache.outputs.cache-hit != 'true'
+  #       uses: actions-rs/install@v0.1.2
+  #       with:
+  #         crate: cargo-make
+  #         version: latest
+  #     - name: Install emsdk
+  #       run: |
+  #         cd ~
+  #         git clone https://github.com/emscripten-core/emsdk.git --branch 2.0.27
+  #         cd emsdk
+  #         ./emsdk install latest
+  #         ./emsdk activate latest
+  #     - name: Run diplomat-get-rev to ensure it works
+  #       id: diplomat-getrev-check
+  #       run: cargo make --loglevel error diplomat-get-rev
+  #     - name: Get Diplomat version
+  #       id: diplomat-version
+  #       run: |
+  #         echo "::set-output name=rev::$(cargo make --loglevel error diplomat-get-rev |  tr -d '[:space:]')"
+  #       shell: bash
+  #     - name: Attempt to load cached Diplomat
+  #       uses: actions/cache@v2
+  #       id: diplomat-cache
+  #       with:
+  #         path: |
+  #           ~/.cargo/bin/diplomat-tool
+  #           ~/.cargo/bin/diplomat-tool.exe
+  #         key: ${{ runner.os }}-diplomat-${{ steps.diplomat-version.outputs.rev }}
+
+  #     - name: Install Diplomat (git hash)
+  #       if: steps.diplomat-cache.outputs.cache-hit != 'true' && !contains(steps.diplomat-version.outputs.rev, '.')
+  #       uses: actions-rs/cargo@v1.0.1
+  #       with:
+  #         command: install
+  #         args: --git https://github.com/rust-diplomat/diplomat.git --rev ${{ steps.diplomat-version.outputs.rev }} diplomat-tool
+
+  #     - name: Install Diplomat (versioned)
+  #       if: steps.diplomat-cache.outputs.cache-hit != 'true' && contains(steps.diplomat-version.outputs.rev, '.')
+  #       uses: actions-rs/cargo@v1.0.1
+  #       with:
+  #         command: install
+  #         args: --git https://github.com/rust-diplomat/diplomat.git --version ${{ steps.diplomat-version.outputs.rev }} diplomat-tool
+
+  #     - name: Build
+  #       uses: actions-rs/cargo@v1.0.1
+  #       with:
+  #         command: make
+  #         args: wasm-release
+  #     - name: Install Node.js v14.17.0
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 14.17.0
+  #     - name: Build
+  #       uses: actions-rs/cargo@v1.0.1
+  #       with:
+  #         command: make
+  #         args: wasm-test-release
+  #     # This has to be a separate test since the emscripten sdk
+  #     # will otherwise interfere with other node-using tests
+  #     - name: Run emscripten test
+  #       run: |
+  #         . ~/emsdk/emsdk_env.sh
+  #         cargo make wasm-cpp-emscripten
+
+  # # Fmt job - runs cargo fmt
+  # fmt:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - name: Load the default Rust toolchain via the rust-toolchain file.
+  #     run: rustup show
+
+  #   - name: Install rustfmt
+  #     run: rustup component add rustfmt
 
 
-  # Tidy job - runs all "cargo make" tidy commands
-  tidy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
+  #   - name: Get cargo-make version
+  #     id: cargo-make-version
+  #     run: |
+  #       echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
+  #     shell: bash
+  #   - name: Attempt to load cached cargo-make
+  #     uses: actions/cache@v2
+  #     id: cargo-make-cache
+  #     with:
+  #       path: |
+  #         ~/.cargo/bin/cargo-make
+  #         ~/.cargo/bin/cargo-make.exe
+  #       key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
+  #   - name: Install cargo-make
+  #     if: steps.cargo-make-cache.outputs.cache-hit != 'true'
+  #     uses: actions-rs/install@v0.1.2
+  #     with:
+  #       crate: cargo-make
+  #       version: latest
 
-    - name: Load the default Rust toolchain via the rust-toolchain file.
-      run: rustup show
 
-    - name: Get cargo-make version
-      id: cargo-make-version
-      run: |
-        echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
-      shell: bash
-    - name: Attempt to load cached cargo-make
-      uses: actions/cache@v2
-      id: cargo-make-cache
-      with:
-        path: |
-          ~/.cargo/bin/cargo-make
-          ~/.cargo/bin/cargo-make.exe
-        key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
-    - name: Install cargo-make
-      if: steps.cargo-make-cache.outputs.cache-hit != 'true'
-      uses: actions-rs/install@v0.1.2
-      with:
-        crate: cargo-make
-        version: latest
+  #   - name: Check Format
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: make
+  #       args: ci-job-fmt
 
-    - name: Get cargo-readme version
-      id: cargo-readme-version
-      run: |
-        echo "::set-output name=hash::$(cargo search cargo-readme | grep '^cargo-readme =' | md5sum)"
-      shell: bash
-    - name: Attempt to load cached cargo-readme
-      uses: actions/cache@v2
-      id: cargo-readme-cache
-      with:
-        path: |
-          ~/.cargo/bin/cargo-readme
-          ~/.cargo/bin/cargo-readme.exe
-        key: ${{ runner.os }}-readme-${{ steps.cargo-readme-version.outputs.hash }}
-    - name: Install cargo-readme
-      if: steps.cargo-readme-cache.outputs.cache-hit != 'true'
-      uses: actions-rs/install@v0.1.2
-      with:
-        crate: cargo-readme
-        version: latest
 
-    # TODO(#234) re-include cache steps, also using Rust version in cache key
+  # # Tidy job - runs all "cargo make" tidy commands
+  # tidy:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
 
-    - name: Tidy
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: make
-        args: ci-job-tidy
+  #   - name: Load the default Rust toolchain via the rust-toolchain file.
+  #     run: rustup show
 
-  # Clippy job (cargo-clippy) - completes and puts warnings inline in PR
-  clippy:
-    runs-on: ubuntu-latest
+  #   - name: Get cargo-make version
+  #     id: cargo-make-version
+  #     run: |
+  #       echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
+  #     shell: bash
+  #   - name: Attempt to load cached cargo-make
+  #     uses: actions/cache@v2
+  #     id: cargo-make-cache
+  #     with:
+  #       path: |
+  #         ~/.cargo/bin/cargo-make
+  #         ~/.cargo/bin/cargo-make.exe
+  #       key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
+  #   - name: Install cargo-make
+  #     if: steps.cargo-make-cache.outputs.cache-hit != 'true'
+  #     uses: actions-rs/install@v0.1.2
+  #     with:
+  #       crate: cargo-make
+  #       version: latest
 
-    steps:
-    - uses: actions/checkout@v2
+  #   - name: Get cargo-readme version
+  #     id: cargo-readme-version
+  #     run: |
+  #       echo "::set-output name=hash::$(cargo search cargo-readme | grep '^cargo-readme =' | md5sum)"
+  #     shell: bash
+  #   - name: Attempt to load cached cargo-readme
+  #     uses: actions/cache@v2
+  #     id: cargo-readme-cache
+  #     with:
+  #       path: |
+  #         ~/.cargo/bin/cargo-readme
+  #         ~/.cargo/bin/cargo-readme.exe
+  #       key: ${{ runner.os }}-readme-${{ steps.cargo-readme-version.outputs.hash }}
+  #   - name: Install cargo-readme
+  #     if: steps.cargo-readme-cache.outputs.cache-hit != 'true'
+  #     uses: actions-rs/install@v0.1.2
+  #     with:
+  #       crate: cargo-readme
+  #       version: latest
 
-    - name: Load the default Rust toolchain via the rust-toolchain file.
-      run: rustup show
+  #   # TODO(#234) re-include cache steps, also using Rust version in cache key
 
-    # Clippy job > Install and run clippy steps
+  #   - name: Tidy
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: make
+  #       args: ci-job-tidy
 
-    - name: Install clippy
-      run: rustup component add clippy
+  # # Clippy job (cargo-clippy) - completes and puts warnings inline in PR
+  # clippy:
+  #   runs-on: ubuntu-latest
 
-    - uses: actions-rs/clippy-check@v1.0.7
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        # keep args in sync with `clippy-all` in .cargo/config.toml
-        args: --all-targets --all-features -- -D warnings
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - name: Load the default Rust toolchain via the rust-toolchain file.
+  #     run: rustup show
+
+  #   # Clippy job > Install and run clippy steps
+
+  #   - name: Install clippy
+  #     run: rustup component add clippy
+
+  #   - uses: actions-rs/clippy-check@v1.0.7
+  #     with:
+  #       token: ${{ secrets.GITHUB_TOKEN }}
+  #       # keep args in sync with `clippy-all` in .cargo/config.toml
+  #       args: --all-targets --all-features -- -D warnings
 
   # Benchmarking & dashboards job
 
@@ -627,11 +627,11 @@ jobs:
       # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix
       matrix:
         component:
-          - components/locid
-          - components/plurals
-          - components/datetime
+          # - components/locid
+          # - components/plurals
+          # - components/datetime
           - components/collections
-          - utils/fixed_decimal
+          # - utils/fixed_decimal
 
 
     # If you are modifying and debugging is required, don't be afraid to get
@@ -640,7 +640,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    needs: [check]
+    # needs: [check]
 
     steps:
       - uses: actions/checkout@v2
@@ -696,7 +696,7 @@ jobs:
 
       - name: Store benchmark result & create dashboard (merge to main only)
         # only merges to main (implies PR is finished and approved by this point)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'unicode-org/icu4x'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'echeran/icu4x'
         uses: rhysd/github-action-benchmark@v1.8.1
         with:
           name: Rust Benchmark
@@ -726,307 +726,307 @@ jobs:
   # The full data report is stored in:
   #   benchmarks/memory/{os}/{example}-dhat-heap.json
 
-  memory:
-    strategy:
-      fail-fast: false
-      # Create a matrix of all platforms, and all components. Each job then can run
-      # multiple examples in that job. The examples are defined as a space separated
-      # list of the name of the examples. The examples are assumed to be in the
-      # examples folder.
-      matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-        # The list of examples to run, with the form {package}/{example}.
-        #
-        # n.b. Don't get tripped up by the yml syntax here. This is a list with a single string
-        # entry. It is using the block chomping indicator ">-", which means the multiline string
-        # will be joined together into one line using a single space between each line. This
-        # will place all of the examples on the same line so they can get passed to the
-        # icu_benchmark_memory cli.
-        examples:
-          - >-
-              icu_calendar/iso_date_manipulations
-              icu_calendar/iso_datetime_manipulations
-              icu_datetime/work_log
-              icu_list/and_list
-              icu_locid/syntatically_canonicalize_locales
-              icu_locid/filter_langids
-              icu_plurals/unread_emails
-              icu_plurals/elevator_floors
-              icu_collections/unicode_bmp_blocks_selector
-              fixed_decimal/permyriad
-              writeable/writeable_message
-              litemap/language_names_lite_map
+  # memory:
+  #   strategy:
+  #     fail-fast: false
+  #     # Create a matrix of all platforms, and all components. Each job then can run
+  #     # multiple examples in that job. The examples are defined as a space separated
+  #     # list of the name of the examples. The examples are assumed to be in the
+  #     # examples folder.
+  #     matrix:
+  #       os: [ ubuntu-latest, macos-latest, windows-latest ]
+  #       # The list of examples to run, with the form {package}/{example}.
+  #       #
+  #       # n.b. Don't get tripped up by the yml syntax here. This is a list with a single string
+  #       # entry. It is using the block chomping indicator ">-", which means the multiline string
+  #       # will be joined together into one line using a single space between each line. This
+  #       # will place all of the examples on the same line so they can get passed to the
+  #       # icu_benchmark_memory cli.
+  #       examples:
+  #         - >-
+  #             icu_calendar/iso_date_manipulations
+  #             icu_calendar/iso_datetime_manipulations
+  #             icu_datetime/work_log
+  #             icu_list/and_list
+  #             icu_locid/syntatically_canonicalize_locales
+  #             icu_locid/filter_langids
+  #             icu_plurals/unread_emails
+  #             icu_plurals/elevator_floors
+  #             icu_collections/unicode_bmp_blocks_selector
+  #             fixed_decimal/permyriad
+  #             writeable/writeable_message
+  #             litemap/language_names_lite_map
 
-    runs-on: ${{ matrix.os }}
+  #   runs-on: ${{ matrix.os }}
 
-    # Only run the memory benchmark if the main build succeeded. The memory benchmark does not
-    # rely on any of the build artifacts.
-    needs: [check]
+  #   # Only run the memory benchmark if the main build succeeded. The memory benchmark does not
+  #   # rely on any of the build artifacts.
+  #   # needs: [check]
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      # Nightly is only needed for the `--profile bench` line. Once that is stabilized,
-      # then this line is no longer needed.
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly-2022-04-05
-          override: true
+  #     # Nightly is only needed for the `--profile bench` line. Once that is stabilized,
+  #     # then this line is no longer needed.
+  #     - uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: nightly-2022-04-05
+  #         override: true
 
-      - name: Run the example with dhat-rs to collect memory information
-        run: |
-          cargo run --package icu_benchmark_memory -- --os ${{ matrix.os }} ${{ matrix.examples }} --toolchain nightly-2022-04-05
+  #     - name: Run the example with dhat-rs to collect memory information
+  #       run: |
+  #         cargo run --package icu_benchmark_memory -- --os ${{ matrix.os }} ${{ matrix.examples }} --toolchain nightly-2022-04-05
 
-      # Benchmarking & dashboards job > (unmerged PR only) Convert benchmark output into
-      # dashboard HTML in a commit of a branch of the local repo.
+  #     # Benchmarking & dashboards job > (unmerged PR only) Convert benchmark output into
+  #     # dashboard HTML in a commit of a branch of the local repo.
 
-      - name: Store benchmark result & create dashboard (unmerged PR only)
-        # any action that is not a merge to main implies unfinished PR
-        if: github.event_name != 'push' || github.ref != 'refs/heads/main'
-        # The gregtatum fork of rhysd/github-action-benchmark contains support for ndjson.
-        # If the PR gets merged, this can be switched back to the main project.
-        # https://github.com/rhysd/github-action-benchmark/pull/54
-        uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
-        with:
-          name: Heap – ${{ matrix.os }}
-          # The ndjson tool is only supported by the gregtatum fork of github-action-benchmark.
-          tool: 'ndjson'
-          benchmark-data-dir-path: ./benchmarks/memory/${{ matrix.os }}
-          output-file-path: ./benchmarks/memory/${{ matrix.os }}/output.ndjson
-          # Show alert with commit comment on detecting possible memory regression
-          alert-threshold: '200%'
-          fail-on-alert: true
-          # Requires one-time-only creation of this branch on remote repo. This will
-          # store the generated information.
-          gh-pages-branch: unmerged-pr-bench-data
+  #     - name: Store benchmark result & create dashboard (unmerged PR only)
+  #       # any action that is not a merge to main implies unfinished PR
+  #       if: github.event_name != 'push' || github.ref != 'refs/heads/main'
+  #       # The gregtatum fork of rhysd/github-action-benchmark contains support for ndjson.
+  #       # If the PR gets merged, this can be switched back to the main project.
+  #       # https://github.com/rhysd/github-action-benchmark/pull/54
+  #       uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+  #       with:
+  #         name: Heap – ${{ matrix.os }}
+  #         # The ndjson tool is only supported by the gregtatum fork of github-action-benchmark.
+  #         tool: 'ndjson'
+  #         benchmark-data-dir-path: ./benchmarks/memory/${{ matrix.os }}
+  #         output-file-path: ./benchmarks/memory/${{ matrix.os }}/output.ndjson
+  #         # Show alert with commit comment on detecting possible memory regression
+  #         alert-threshold: '200%'
+  #         fail-on-alert: true
+  #         # Requires one-time-only creation of this branch on remote repo. This will
+  #         # store the generated information.
+  #         gh-pages-branch: unmerged-pr-bench-data
 
-          # Do not store historical benchmark info of unfinished PRs. Commits seem to get
-          # made anyways, so make sure that the branch in `gh-pages-branch` is
-          # different from the branch used for merges to main branch.
-          auto-push: false
+  #         # Do not store historical benchmark info of unfinished PRs. Commits seem to get
+  #         # made anyways, so make sure that the branch in `gh-pages-branch` is
+  #         # different from the branch used for merges to main branch.
+  #         auto-push: false
 
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          comment-on-alert: true
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #         comment-on-alert: true
 
-      # Benchmarking & dashboards job > (PR merge to main only) Convert benchmark output
-      # into dashboard HTML in a commit of a branch of the local repo.
+  #     # Benchmarking & dashboards job > (PR merge to main only) Convert benchmark output
+  #     # into dashboard HTML in a commit of a branch of the local repo.
 
-      - name: Store benchmark result & create dashboard (merge to main only)
-        # only merges to main (implies PR is finished and approved by this point)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'unicode-org/icu4x'
-        # The gregtatum fork of rhysd/github-action-benchmark contains support for ndjson.
-        # If the PR gets merged, this can be switched back to the main project.
-        # https://github.com/rhysd/github-action-benchmark/pull/54
-        uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
-        with:
-          name: Heap – ${{ matrix.os }}
-          # The ndjson tool is only supported by the gregtatum fork of github-action-benchmark.
-          tool: 'ndjson'
-          benchmark-data-dir-path: ./benchmarks/memory/${{ matrix.os }}
-          output-file-path: ./benchmarks/memory/${{ matrix.os }}/output.ndjson
-          alert-threshold: '200%'
-          fail-on-alert: true
-          # The historical run information will be stored in this branch. This is the same
-          # branch that is being used by the performance benchmark. The information is
-          # computed by gregtatum/github-action-benchmark, and is added to a .js file in
-          # the branch, e.g. benchmarks/memory/{os}/data.js
-          gh-pages-branch: gh-pages
-          auto-push: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          comment-on-alert: true
-          alert-comment-cc-users: '@sffc,@zbraniecki,@echeran'
+  #     - name: Store benchmark result & create dashboard (merge to main only)
+  #       # only merges to main (implies PR is finished and approved by this point)
+  #       if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'echeran/icu4x'
+  #       # The gregtatum fork of rhysd/github-action-benchmark contains support for ndjson.
+  #       # If the PR gets merged, this can be switched back to the main project.
+  #       # https://github.com/rhysd/github-action-benchmark/pull/54
+  #       uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+  #       with:
+  #         name: Heap – ${{ matrix.os }}
+  #         # The ndjson tool is only supported by the gregtatum fork of github-action-benchmark.
+  #         tool: 'ndjson'
+  #         benchmark-data-dir-path: ./benchmarks/memory/${{ matrix.os }}
+  #         output-file-path: ./benchmarks/memory/${{ matrix.os }}/output.ndjson
+  #         alert-threshold: '200%'
+  #         fail-on-alert: true
+  #         # The historical run information will be stored in this branch. This is the same
+  #         # branch that is being used by the performance benchmark. The information is
+  #         # computed by gregtatum/github-action-benchmark, and is added to a .js file in
+  #         # the branch, e.g. benchmarks/memory/{os}/data.js
+  #         gh-pages-branch: gh-pages
+  #         auto-push: true
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #         comment-on-alert: true
+  #         alert-comment-cc-users: '@sffc,@zbraniecki,@echeran'
 
   # Binary size benchmark: build and size wasm binaries; creates ndjson output data format
 
-  binsize:
-    strategy:
-      fail-fast: false
-      matrix:
-        type: [wasm, gz]
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
+  # binsize:
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       type: [wasm, gz]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
       
-    - name: Get cargo-make version
-      id: cargo-make-version
-      run: |
-        echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
-      shell: bash
+  #   - name: Get cargo-make version
+  #     id: cargo-make-version
+  #     run: |
+  #       echo "::set-output name=hash::$(cargo search cargo-make | grep '^cargo-make =' | md5sum)"
+  #     shell: bash
 
-    - name: Attempt to load cached cargo-make
-      uses: actions/cache@v2
-      id: cargo-make-cache
-      with:
-        path: |
-          ~/.cargo/bin/cargo-make
-          ~/.cargo/bin/cargo-make.exe
-        key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
+  #   - name: Attempt to load cached cargo-make
+  #     uses: actions/cache@v2
+  #     id: cargo-make-cache
+  #     with:
+  #       path: |
+  #         ~/.cargo/bin/cargo-make
+  #         ~/.cargo/bin/cargo-make.exe
+  #       key: ${{ runner.os }}-make-${{ steps.cargo-make-version.outputs.hash }}
 
-    - name: Install cargo-make
-      if: steps.cargo-make-cache.outputs.cache-hit != 'true'
-      uses: actions-rs/install@v0.1.2
-      with:
-        crate: cargo-make
-        version: latest
+  #   - name: Install cargo-make
+  #     if: steps.cargo-make-cache.outputs.cache-hit != 'true'
+  #     uses: actions-rs/install@v0.1.2
+  #     with:
+  #       crate: cargo-make
+  #       version: latest
 
-    - name: Get twiggy version
-      id: twiggy-version
-      run: |
-        # We install a specific version since we need https://github.com/rustwasm/twiggy/pull/576 and
-        # twiggy has not been updated yet. Switch this back to a regular cargo install when twiggy is updated.
-        echo "::set-output name=hash::92d59f439821cd6514a88e807dd6576bfece6244"
-      shell: bash
-    - name: Attempt to load cached twiggy
-      uses: actions/cache@v2
-      id: twiggy-cache
-      with:
-        path: |
-          ~/.cargo/bin/twiggy
-          ~/.cargo/bin/twiggy.exe
-        key: ${{ runner.os }}-twiggy-${{ steps.twiggy-version.outputs.hash }}
-    - name: Install twiggy
-      if: steps.twiggy-cache.outputs.cache-hit != 'true'
-      uses: actions-rs/cargo@v1.0.1
-      with:
-        command: install
-        args: --git https://github.com/rustwasm/twiggy.git --rev ${{ steps.twiggy-version.outputs.hash }} twiggy
+  #   - name: Get twiggy version
+  #     id: twiggy-version
+  #     run: |
+  #       # We install a specific version since we need https://github.com/rustwasm/twiggy/pull/576 and
+  #       # twiggy has not been updated yet. Switch this back to a regular cargo install when twiggy is updated.
+  #       echo "::set-output name=hash::92d59f439821cd6514a88e807dd6576bfece6244"
+  #     shell: bash
+  #   - name: Attempt to load cached twiggy
+  #     uses: actions/cache@v2
+  #     id: twiggy-cache
+  #     with:
+  #       path: |
+  #         ~/.cargo/bin/twiggy
+  #         ~/.cargo/bin/twiggy.exe
+  #       key: ${{ runner.os }}-twiggy-${{ steps.twiggy-version.outputs.hash }}
+  #   - name: Install twiggy
+  #     if: steps.twiggy-cache.outputs.cache-hit != 'true'
+  #     uses: actions-rs/cargo@v1.0.1
+  #     with:
+  #       command: install
+  #       args: --git https://github.com/rustwasm/twiggy.git --rev ${{ steps.twiggy-version.outputs.hash }} twiggy
 
-    - name: Install npm dependencies from cache
-      uses: actions/cache@v2
-      id: npm-cache
-      with:
-        path: ffi/diplomat/wasm/icu4x/node_modules
-        key: ${{ runner.os }}-npm-${{ hashFiles('ffi/diplomat/wasm/icu4x/package-lock.json') }}
+  #   - name: Install npm dependencies from cache
+  #     uses: actions/cache@v2
+  #     id: npm-cache
+  #     with:
+  #       path: ffi/diplomat/wasm/icu4x/node_modules
+  #       key: ${{ runner.os }}-npm-${{ hashFiles('ffi/diplomat/wasm/icu4x/package-lock.json') }}
 
-    - name: Install npm packages.
-      # If npm dependencies are not found in cache.
-      if: steps.npm-cache.outputs.cache-hit != 'true'
-      # Note: if package.json and package-lock.json are out of sync then
-      # 'npm ci' will fail. Locally execute 'npm install' in directory
-      # 'ffi/diplomat/wasm/icu4x' to generate a new package-lock.json file and
-      # merge it into the repository.
-      run: |
-        cd ffi/diplomat/wasm/icu4x
-        npm ci
-        if [ $? -ne 0 ]
-        then
-          echo Execution of npm ci failed. This may be due to package.json
-          echo and package-lock.json being out of sync. Locally execute
-          echo npm install in directory  ffi/diplomat/wasm/icu4x to generate a
-          echo new package-lock.json file and and merge it into the repository.
-          exit 1
-        fi
+  #   - name: Install npm packages.
+  #     # If npm dependencies are not found in cache.
+  #     if: steps.npm-cache.outputs.cache-hit != 'true'
+  #     # Note: if package.json and package-lock.json are out of sync then
+  #     # 'npm ci' will fail. Locally execute 'npm install' in directory
+  #     # 'ffi/diplomat/wasm/icu4x' to generate a new package-lock.json file and
+  #     # merge it into the repository.
+  #     run: |
+  #       cd ffi/diplomat/wasm/icu4x
+  #       npm ci
+  #       if [ $? -ne 0 ]
+  #       then
+  #         echo Execution of npm ci failed. This may be due to package.json
+  #         echo and package-lock.json being out of sync. Locally execute
+  #         echo npm install in directory  ffi/diplomat/wasm/icu4x to generate a
+  #         echo new package-lock.json file and and merge it into the repository.
+  #         exit 1
+  #       fi
 
-    - name: Set path to wasm-opt and wabt binaries
-      run: |
-        echo "$PWD/ffi/diplomat/wasm/icu4x/node_modules/wasm-opt/bin" >> $GITHUB_PATH
-        echo "$PWD/ffi/diplomat/wasm/icu4x/node_modules/wabt/bin" >> $GITHUB_PATH
+  #   - name: Set path to wasm-opt and wabt binaries
+  #     run: |
+  #       echo "$PWD/ffi/diplomat/wasm/icu4x/node_modules/wasm-opt/bin" >> $GITHUB_PATH
+  #       echo "$PWD/ffi/diplomat/wasm/icu4x/node_modules/wabt/bin" >> $GITHUB_PATH
 
-    - name: Install prerequisites for wasm build
-      run: |
-        rustup toolchain list
-        rustup toolchain install nightly-2022-04-05
-        rustup component add --toolchain nightly-2022-04-05 rust-src
+  #   - name: Install prerequisites for wasm build
+  #     run: |
+  #       rustup toolchain list
+  #       rustup toolchain install nightly-2022-04-05
+  #       rustup component add --toolchain nightly-2022-04-05 rust-src
 
-    - name: Setup output data directory
-      run: |
-        mkdir -p benchmarks/binsize/${{ matrix.type }}
+  #   - name: Setup output data directory
+  #     run: |
+  #       mkdir -p benchmarks/binsize/${{ matrix.type }}
 
-    - name: Build wasm executables
-      run: cargo make wasm-examples
+  #   - name: Build wasm executables
+  #     run: cargo make wasm-examples
 
-    - name: gzip wasm executables if requested
-      if: ${{ matrix.type == 'gz' }}
-      run: (cd wasmpkg/wasm-opt && gzip *+opt.wasm)
+  #   - name: gzip wasm executables if requested
+  #     if: ${{ matrix.type == 'gz' }}
+  #     run: (cd wasmpkg/wasm-opt && gzip *+opt.wasm)
 
-    - name: Measure size of executables
-      run: |
-        cargo run --package icu_benchmark_binsize  -- wasmpkg/wasm-opt ${{ matrix.type }} | tee benchmarks/binsize/${{ matrix.type }}/output.txt
+  #   - name: Measure size of executables
+  #     run: |
+  #       cargo run --package icu_benchmark_binsize  -- wasmpkg/wasm-opt ${{ matrix.type }} | tee benchmarks/binsize/${{ matrix.type }}/output.txt
 
-    - name: Store benchmark result (non-merge action only)
-      # Data from anything that is not a merge to mainline goes to a preliminary branch
-      if: github.event_name != 'push' || github.ref != 'refs/heads/main'
-      # Use gregtatum special feature to process ndjson-formatted benchmark data
-      uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
-      with:
-        tool: 'ndjson'
-        output-file-path: benchmarks/binsize/${{ matrix.type }}/output.txt
-        benchmark-data-dir-path: ./benchmarks/binsize/${{ matrix.type }}
-        # Tentative setting, optimized value to be determined
-        alert-threshold: '200%'
-        fail-on-alert: true
-        gh-pages-branch:  unmerged-pr-bench-data
-        auto-push: false
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        comment-on-alert: true
+  #   - name: Store benchmark result (non-merge action only)
+  #     # Data from anything that is not a merge to mainline goes to a preliminary branch
+  #     if: github.event_name != 'push' || github.ref != 'refs/heads/main'
+  #     # Use gregtatum special feature to process ndjson-formatted benchmark data
+  #     uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+  #     with:
+  #       tool: 'ndjson'
+  #       output-file-path: benchmarks/binsize/${{ matrix.type }}/output.txt
+  #       benchmark-data-dir-path: ./benchmarks/binsize/${{ matrix.type }}
+  #       # Tentative setting, optimized value to be determined
+  #       alert-threshold: '200%'
+  #       fail-on-alert: true
+  #       gh-pages-branch:  unmerged-pr-bench-data
+  #       auto-push: false
+  #       github-token: ${{ secrets.GITHUB_TOKEN }}
+  #       comment-on-alert: true
 
-    - name: Store benchmark result (merge to main only)
-      # Only for PRs that merge into the ICU4X mainline.
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'unicode-org/icu4x'
-      # Use gregtatum special feature to process ndjson-formatted benchmark data
-      uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
-      with:
-        tool: 'ndjson'
-        output-file-path: benchmarks/binsize/${{ matrix.type }}/output.txt
-        benchmark-data-dir-path: ./benchmarks/binsize/${{ matrix.type }}
-        # Tentative setting, optimized value to be determined
-        alert-threshold: '200%'
-        fail-on-alert: true
-        gh-pages-branch: gh-pages
-        auto-push: true
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        comment-on-alert: true
-        alert-comment-cc-users: '@gnrunge,@sffc,@zbraniecki,@echeran'
+  #   - name: Store benchmark result (merge to main only)
+  #     # Only for PRs that merge into the ICU4X mainline.
+  #     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'echeran/icu4x'
+  #     # Use gregtatum special feature to process ndjson-formatted benchmark data
+  #     uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+  #     with:
+  #       tool: 'ndjson'
+  #       output-file-path: benchmarks/binsize/${{ matrix.type }}/output.txt
+  #       benchmark-data-dir-path: ./benchmarks/binsize/${{ matrix.type }}
+  #       # Tentative setting, optimized value to be determined
+  #       alert-threshold: '200%'
+  #       fail-on-alert: true
+  #       gh-pages-branch: gh-pages
+  #       auto-push: true
+  #       github-token: ${{ secrets.GITHUB_TOKEN }}
+  #       comment-on-alert: true
+  #       alert-comment-cc-users: '@gnrunge,@sffc,@zbraniecki,@echeran'
 
   # Data size benchmark: track size of provider/testdata/data/testdata.postcard (total data size).
 
-  datasize:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
+  # datasize:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
 
-    - name: Setup output data directory
-      run: |
-        mkdir -p benchmarks/datasize
+  #   - name: Setup output data directory
+  #     run: |
+  #       mkdir -p benchmarks/datasize
 
-    - name: Measure size of selected data package provider/testdata/data/testdata.postcard
-      run: |
-        cargo run --package icu_benchmark_binsize  -- provider/testdata/data/testdata.postcard file | tee benchmarks/datasize/output.txt
+  #   - name: Measure size of selected data package provider/testdata/data/testdata.postcard
+  #     run: |
+  #       cargo run --package icu_benchmark_binsize  -- provider/testdata/data/testdata.postcard file | tee benchmarks/datasize/output.txt
 
-    - name: Store benchmark result (non-merge action only)
-      # Data from anything that is not a merge to mainline goes to a preliminary branch
-      if: github.event_name != 'push' || github.ref != 'refs/heads/main'
-      # Use gregtatum special feature to process ndjson-formatted benchmark data
-      uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
-      with:
-        tool: 'ndjson'
-        output-file-path: benchmarks/datasize/output.txt
-        benchmark-data-dir-path: ./benchmarks/datasize
-        # Tentative setting, optimized value to be determined
-        alert-threshold: '100%'
-        fail-on-alert: true
-        gh-pages-branch:  unmerged-pr-bench-data
-        auto-push: false
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        comment-on-alert: true
+  #   - name: Store benchmark result (non-merge action only)
+  #     # Data from anything that is not a merge to mainline goes to a preliminary branch
+  #     if: github.event_name != 'push' || github.ref != 'refs/heads/main'
+  #     # Use gregtatum special feature to process ndjson-formatted benchmark data
+  #     uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+  #     with:
+  #       tool: 'ndjson'
+  #       output-file-path: benchmarks/datasize/output.txt
+  #       benchmark-data-dir-path: ./benchmarks/datasize
+  #       # Tentative setting, optimized value to be determined
+  #       alert-threshold: '100%'
+  #       fail-on-alert: true
+  #       gh-pages-branch:  unmerged-pr-bench-data
+  #       auto-push: false
+  #       github-token: ${{ secrets.GITHUB_TOKEN }}
+  #       comment-on-alert: true
 
-    - name: Store benchmark result (merge to main only)
-      # Only for PRs that merge into the ICU4X mainline.
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'unicode-org/icu4x'
-      # Use gregtatum special feature to process ndjson-formatted benchmark data
-      uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
-      with:
-        tool: 'ndjson'
-        output-file-path: benchmarks/datasize/output.txt
-        benchmark-data-dir-path: ./benchmarks/datasize
-        # Tentative setting, optimized value to be determined
-        alert-threshold: '100%'
-        fail-on-alert: true
-        gh-pages-branch: gh-pages
-        auto-push: true
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        comment-on-alert: true
-        alert-comment-cc-users: '@gnrunge,@sffc,@zbraniecki,@echeran'
+  #   - name: Store benchmark result (merge to main only)
+  #     # Only for PRs that merge into the ICU4X mainline.
+  #     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'echeran/icu4x'
+  #     # Use gregtatum special feature to process ndjson-formatted benchmark data
+  #     uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+  #     with:
+  #       tool: 'ndjson'
+  #       output-file-path: benchmarks/datasize/output.txt
+  #       benchmark-data-dir-path: ./benchmarks/datasize
+  #       # Tentative setting, optimized value to be determined
+  #       alert-threshold: '100%'
+  #       fail-on-alert: true
+  #       gh-pages-branch: gh-pages
+  #       auto-push: true
+  #       github-token: ${{ secrets.GITHUB_TOKEN }}
+  #       comment-on-alert: true
+  #       alert-comment-cc-users: '@gnrunge,@sffc,@zbraniecki,@echeran'
 
   # Docs job
 
@@ -1049,7 +1049,7 @@ jobs:
 
     - name: Upload doc data (merge to main only)
       # Only for PRs that merge into the ICU4X mainline.
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'unicode-org/icu4x'
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'echeran/icu4x'
       uses: actions/upload-artifact@v2
       with:
         path: target/doc/**
@@ -1063,11 +1063,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    needs: [check, tidy, benchmark, memory, binsize, datasize, doc]
+    # needs: [check, tidy, benchmark, memory, binsize, datasize, doc]
+    needs: [benchmark, doc]
 
     ## Only create docs for merges/pushes to main (skip PRs).
     ## Multiple unfinished PRs should not clobber docs from approved code.
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'unicode-org/icu4x'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'echeran/icu4x'
 
     steps:
     - uses: actions/checkout@v2
@@ -1123,7 +1124,7 @@ jobs:
         # target repo where the Github Pages will be copied to.
         # https://github.com/marketplace/actions/github-pages-action#%EF%B8%8F-deploy-to-external-repository
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        external_repository: unicode-org/icu4x-docs
+        external_repository: echeran/icu4x-docs
         publish_branch: gh-pages
         publish_dir: ./
         commit_message: Rust API docs + benchmark dashboards -> GH Pages
