@@ -1,6 +1,6 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1665421664167,
-  "repoUrl": "https://github.com/unicode-org/icu4x",
+  "lastUpdate": 1665442049395,
+  "repoUrl": "https://github.com/echeran/icu4x",
   "entries": {
     "Rust Benchmark": [
       {
@@ -27695,6 +27695,126 @@ window.BENCHMARK_DATA = {
             "name": "uniset/overview",
             "value": 39618567,
             "range": "± 65284",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "uniset/contains/best",
+            "value": 2,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "uniset/contains/worst",
+            "value": 2,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "uniset/contains_range/best",
+            "value": 2,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "uniset/contains_range/worst",
+            "value": 2,
+            "range": "± 0",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "651e15fb0883696912bfff90940e65e02b991d55",
+          "message": "Better benchmark data branch test (#29)\n\n* Use `merged-bench-data` branch instead of `gh-pages` for historical data\r\n\r\n* Use new historical data branch when copying docs to external repo\r\n\r\n* Update source comments in CI workflow\r\n\r\n* Changes for needed for testing purposes",
+          "timestamp": "2022-10-10T22:21:12Z",
+          "tree_id": "0df5f78035fa8804805efa0325b284d3c160dc57",
+          "url": "https://github.com/echeran/icu4x/commit/651e15fb0883696912bfff90940e65e02b991d55"
+        },
+        "date": 1665441980349,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "cpt/overview",
+            "value": 552,
+            "range": "± 28",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "cpt/get/small/eng",
+            "value": 356,
+            "range": "± 23",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "cpt/get/small/pcd",
+            "value": 393,
+            "range": "± 13",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "cpt/get/small/ukr",
+            "value": 514,
+            "range": "± 24",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "cpt/get/small/yue",
+            "value": 800,
+            "range": "± 35",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "cpt/get/small/ccp",
+            "value": 907,
+            "range": "± 29",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "cpt/get/fast/eng",
+            "value": 354,
+            "range": "± 14",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "cpt/get/fast/pcd",
+            "value": 390,
+            "range": "± 8",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "cpt/get/fast/ukr",
+            "value": 561,
+            "range": "± 7",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "cpt/get/fast/yue",
+            "value": 533,
+            "range": "± 5",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "cpt/get/fast/ccp",
+            "value": 955,
+            "range": "± 9",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "uniset/overview",
+            "value": 45593141,
+            "range": "± 1494858",
             "unit": "ns/iter"
           },
           {
