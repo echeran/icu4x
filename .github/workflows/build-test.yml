@@ -722,7 +722,7 @@ jobs:
 
       - name: Store benchmark result & create dashboard (merge to main only)
         # only merges to main (implies PR is finished and approved by this point)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'unicode-org/icu4x'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'echeran/icu4x'
         uses: rhysd/github-action-benchmark@v1.8.1
         with:
           name: Rust Benchmark
@@ -838,7 +838,7 @@ jobs:
 
       - name: Store benchmark result & create dashboard (merge to main only)
         # only merges to main (implies PR is finished and approved by this point)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'unicode-org/icu4x'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'echeran/icu4x'
         # The gregtatum fork of rhysd/github-action-benchmark contains support for ndjson.
         # If the PR gets merged, this can be switched back to the main project.
         # https://github.com/rhysd/github-action-benchmark/pull/54
@@ -987,7 +987,7 @@ jobs:
 
     - name: Store benchmark result (merge to main only)
       # Only for PRs that merge into the ICU4X mainline.
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'unicode-org/icu4x'
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'echeran/icu4x'
       # Use gregtatum special feature to process ndjson-formatted benchmark data
       uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
       with:
@@ -1037,7 +1037,7 @@ jobs:
 
     - name: Store benchmark result (merge to main only)
       # Only for PRs that merge into the ICU4X mainline.
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'unicode-org/icu4x'
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'echeran/icu4x'
       # Use gregtatum special feature to process ndjson-formatted benchmark data
       uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
       with:
@@ -1074,7 +1074,7 @@ jobs:
 
     - name: Upload doc data (merge to main only)
       # Only for PRs that merge into the ICU4X mainline.
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'unicode-org/icu4x'
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'echeran/icu4x'
       uses: actions/upload-artifact@v2
       with:
         path: target/doc/**
@@ -1092,7 +1092,7 @@ jobs:
 
     ## Only create docs for merges/pushes to main (skip PRs).
     ## Multiple unfinished PRs should not clobber docs from approved code.
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'unicode-org/icu4x'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'echeran/icu4x'
 
     steps:
     - uses: actions/checkout@v2
@@ -1152,7 +1152,7 @@ jobs:
         # target repo where the Github Pages will be copied to.
         # https://github.com/marketplace/actions/github-pages-action#%EF%B8%8F-deploy-to-external-repository
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        external_repository: unicode-org/icu4x-docs
+        external_repository: echeran/icu4x-docs
         publish_branch: gh-pages
         publish_dir: ./
         commit_message: Rust API docs + benchmark dashboards -> GH Pages
