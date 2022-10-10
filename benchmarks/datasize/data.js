@@ -1,6 +1,6 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1665421018133,
-  "repoUrl": "https://github.com/unicode-org/icu4x",
+  "lastUpdate": 1665441352596,
+  "repoUrl": "https://github.com/echeran/icu4x",
   "entries": {
     "Benchmark": [
       {
@@ -30113,6 +30113,36 @@ window.BENCHMARK_DATA = {
           "url": "https://github.com/unicode-org/icu4x/commit/aef683066aa355158f1e37cd843915ab7a49b59c"
         },
         "date": 1665420946899,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "provider/testdata/data/testdata.postcard",
+            "value": 4022148,
+            "unit": "bytes",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "651e15fb0883696912bfff90940e65e02b991d55",
+          "message": "Better benchmark data branch test (#29)\n\n* Use `merged-bench-data` branch instead of `gh-pages` for historical data\r\n\r\n* Use new historical data branch when copying docs to external repo\r\n\r\n* Update source comments in CI workflow\r\n\r\n* Changes for needed for testing purposes",
+          "timestamp": "2022-10-10T22:21:12Z",
+          "tree_id": "0df5f78035fa8804805efa0325b284d3c160dc57",
+          "url": "https://github.com/echeran/icu4x/commit/651e15fb0883696912bfff90940e65e02b991d55"
+        },
+        "date": 1665441274425,
         "tool": "ndjson",
         "benches": [
           {
