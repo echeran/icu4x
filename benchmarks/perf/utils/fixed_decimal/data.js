@@ -1,6 +1,6 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1665421672910,
-  "repoUrl": "https://github.com/unicode-org/icu4x",
+  "lastUpdate": 1665442132030,
+  "repoUrl": "https://github.com/echeran/icu4x",
   "entries": {
     "Rust Benchmark": [
       {
@@ -56789,6 +56789,66 @@ window.BENCHMARK_DATA = {
             "name": "from_string/1000000001",
             "value": 86,
             "range": "± 6",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "651e15fb0883696912bfff90940e65e02b991d55",
+          "message": "Better benchmark data branch test (#29)\n\n* Use `merged-bench-data` branch instead of `gh-pages` for historical data\r\n\r\n* Use new historical data branch when copying docs to external repo\r\n\r\n* Update source comments in CI workflow\r\n\r\n* Changes for needed for testing purposes",
+          "timestamp": "2022-10-10T22:21:12Z",
+          "tree_id": "0df5f78035fa8804805efa0325b284d3c160dc57",
+          "url": "https://github.com/echeran/icu4x/commit/651e15fb0883696912bfff90940e65e02b991d55"
+        },
+        "date": 1665442071951,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "fixed_decimal/overview",
+            "value": 100627,
+            "range": "± 8085",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "isize/smaller",
+            "value": 20184,
+            "range": "± 902",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "isize/larger",
+            "value": 57447,
+            "range": "± 3777",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "to_string/to_string/908070605040302010",
+            "value": 200,
+            "range": "± 11",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "to_string/write_to/908070605040302010",
+            "value": 78,
+            "range": "± 7",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "from_string/1000000001",
+            "value": 67,
+            "range": "± 3",
             "unit": "ns/iter"
           }
         ]
